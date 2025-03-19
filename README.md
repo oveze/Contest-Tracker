@@ -13,6 +13,10 @@ A comprehensive web application for tracking programming contests across various
 - **Mobile Responsive**: Works on desktop and mobile devices
 
 
+##📹 Watch Demo Video
+(https://github.com/oveze/Contest-Tracker/blob/main/Recording%202025-03-19%20141610%20(1).mp4)
+
+
 
 ## Technologies Used
 
@@ -167,5 +171,10 @@ To deploy the application to production:
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
+
+
+
+
 
 
