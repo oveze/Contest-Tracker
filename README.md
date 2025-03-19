@@ -168,7 +168,4 @@ To deploy the application to production:
 
 [MIT](https://choosealicense.com/licenses/mit/)
 
-## Contact
-
-Your Name - Mohammed oveze ovezeov@gmail.com
 
