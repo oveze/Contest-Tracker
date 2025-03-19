@@ -12,14 +12,14 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Remove deprecated options from MongoDB connection
+
 mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://ovezeov:FwOll9LUSleet6IK@cluster0.y0oga.mongodb.net/Nodejs')
   .then(() => console.log('MongoDB connected'))
   .catch((error) => console.log('MongoDB connection error:', error));
 
 const Contest = require("./models/Contest");
 
-// Improved error handling for API requests with custom options
+
 const fetchWithRetry = async (url, options = {}, retries = 3) => {
   try {
     if (options.method === "POST") {
@@ -51,7 +51,7 @@ const fetchContests = async () => {
   let contests = [];
   let fetchErrors = [];
 
-  // Fetch Codeforces Contests
+ 
   try {
     const codeforces = await fetchWithRetry("https://codeforces.com/api/contest.list");
     if (codeforces.data.status === "OK") {
@@ -74,7 +74,7 @@ const fetchContests = async () => {
     fetchErrors.push(`Codeforces: ${error.message}`);
   }
 
-  // Try fetching CodeChef contests from kontests.net first
+  
   try {
     const codechef = await fetchWithRetry("https://kontests.net/api/v1/code_chef", {}, 1);
     if (codechef.data && Array.isArray(codechef.data)) {
@@ -94,16 +94,12 @@ const fetchContests = async () => {
     console.error("Error fetching CodeChef contests from kontests.net:", error.message);
     fetchErrors.push(`CodeChef (kontests.net): ${error.message}`);
     
-    // Fallback: Use CodeChef's official API or scrape from their website
+    
     try {
-      // This is a placeholder - you'd need to implement direct API access
-      // or scraping from CodeChef's website
+   
       console.log("CodeChef fallback: Would attempt direct fetch here");
       
-      // Example implementation using cheerio for scraping (not included here)
-      // const response = await fetchWithRetry("https://www.codechef.com/contests");
-      // const html = response.data;
-      // ... use cheerio to parse contests and add them to the contests array
+  
       
     } catch (fallbackError) {
       console.error("Error fetching CodeChef contests directly:", fallbackError.message);
@@ -111,7 +107,7 @@ const fetchContests = async () => {
     }
   }
 
-  // Try fetching LeetCode contests from kontests.net first
+  
   try {
     const leetcode = await fetchWithRetry("https://kontests.net/api/v1/leet_code", {}, 1);
     if (leetcode.data && Array.isArray(leetcode.data)) {
@@ -206,16 +202,16 @@ const syncContests = async () => {
   console.log(`Synced ${syncedCount} contests to MongoDB`);
 };
 
-// Health check endpoint
+
 app.get("/api/health", async (req, res) => {
   try {
-    // Check database connection
+   
     const dbStatus = mongoose.connection.readyState === 1 ? "connected" : "disconnected";
     
-    // Check DNS resolution for API endpoints
+    
     const dnsChecks = {};
     
-    // Helper function for DNS checks
+   
     const checkDNS = async (domain) => {
       return new Promise((resolve) => {
         dns.lookup(domain, (err) => {
@@ -228,7 +224,7 @@ app.get("/api/health", async (req, res) => {
       });
     };
     
-    // Check all domains
+   
     dnsChecks.kontests = await checkDNS('kontests.net');
     dnsChecks.codeforces = await checkDNS('codeforces.com');
     dnsChecks.leetcode = await checkDNS('leetcode.com');
@@ -252,8 +248,7 @@ app.get("/api/health", async (req, res) => {
   }
 });
 
-// Get all contests (with optional filters)
-// Get all contests (with optional filters but no sync)
+
 app.get("/api/contests", async (req, res) => {
   try {
     const { platforms, status, sync } = req.query;
@@ -261,12 +256,11 @@ app.get("/api/contests", async (req, res) => {
     
     let query = {};
     
-    // Filter by platforms if specified
     if (platforms) {
       query.platform = { $in: platforms.split(",") };
     }
     
-    // Filter by status if specified
+   
     if (status) {
       if (status === "upcoming") {
         query.date = { $gt: now };
@@ -283,7 +277,7 @@ app.get("/api/contests", async (req, res) => {
         };
       }
     } else {
-      // Default to upcoming contests
+      
       query.date = { $gte: new Date() };
     }
     
@@ -295,7 +289,7 @@ app.get("/api/contests", async (req, res) => {
   }
 });
 
-// Get past contests
+
 app.get("/api/past-contests", async (req, res) => {
   try {
     const { platforms } = req.query;
@@ -421,7 +415,7 @@ const port = process.env.PORT || 2000;
 app.listen(port, async () => {
   console.log(`Server running on port ${port}`);
   
-  // Sync contests on server start
+ 
   try {
     await syncContests();
     lastSyncTime = new Date();
@@ -429,3 +423,6 @@ app.listen(port, async () => {
     console.error("Error syncing contests on startup:", error);
   }
 });
+
+
+module.exports = app;
