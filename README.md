@@ -12,9 +12,7 @@ A comprehensive web application for tracking programming contests across various
 - **YouTube Solution Links**: Attach YouTube solution links to past contests (via Admin Panel)
 - **Mobile Responsive**: Works on desktop and mobile devices
 
-## Screenshots
 
-(Add screenshots here)
 
 ## Technologies Used
 
